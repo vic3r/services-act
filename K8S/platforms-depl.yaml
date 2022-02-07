@@ -9,7 +9,7 @@ spec:
       app: platformservice
   template:
     metadata:
-      label:
+      labels:
         app: platformservice
     spec:
       containers:
