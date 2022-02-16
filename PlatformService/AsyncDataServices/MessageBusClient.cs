@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using System.Text.Json;
 using Microsoft.Extensions.Configuration;
 using PlatformService.Dtos;
@@ -41,6 +42,7 @@ namespace PlatformService.AsyncDataServices
             {
                 Console.WriteLine("--> RabbitMQ Connection Open, sending message...");
                 // TODO send the message
+                SendMessage(message);
             }
             else
             {
@@ -50,7 +52,26 @@ namespace PlatformService.AsyncDataServices
 
         private void SendMessage(string message)
         {
+            var body = Encoding.UTF8.GetBytes(message);
 
+            _channel.BasicPublish(
+                exchange: "trigger",
+                routingKey: "",
+                basicProperties: null,
+                body: body
+            );
+
+            Console.WriteLine($"--> We have sent {message}");
+        }
+
+        public void Dispose()
+        {
+            Console.WriteLine("Message Bus Disposed");
+            if (_channel.IsOpen)
+            {
+                _channel.Close();
+                _connection.Close();
+            }
         }
 
         private void RabbitMQ_ConnectionShutdown(object sender, ShutdownEventArgs e)
