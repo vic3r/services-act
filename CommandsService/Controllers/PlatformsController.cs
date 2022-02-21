@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using AutoMapper;
-using CommandService.Data;
+using CommandsService.Data;
 using CommandsService.Dtos;
 using Microsoft.AspNetCore.Mvc;
 

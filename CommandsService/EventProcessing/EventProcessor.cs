@@ -1,7 +1,7 @@
 using System;
 using System.Text.Json;
 using AutoMapper;
-using CommandService.Data;
+using CommandsService.Data;
 using CommandsService.Dtos;
 using CommandsService.Models;
 using Microsoft.Extensions.DependencyInjection;
