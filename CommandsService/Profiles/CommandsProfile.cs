@@ -3,13 +3,13 @@ using CommandsService.Dtos;
 using CommandsService.Models;
 using PlatformService;
 
-namespace CommandService.Profiles
+namespace CommandsService.Profiles
 {
     public class CommandsProfile : Profile
     {
         public CommandsProfile()
         {
-            // Source => Target
+            // Source -> Target
             CreateMap<Platform, PlatformReadDto>();
             CreateMap<CommandCreateDto, Command>();
             CreateMap<Command, CommandReadDto>();

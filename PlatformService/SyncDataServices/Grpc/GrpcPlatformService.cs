@@ -7,10 +7,10 @@ namespace PlatformService.SyncDataServices.Grpc
 {
     public class GrpcPlatformService : GrpcPlatform.GrpcPlatformBase
     {
-        private readonly PlatformRepo _repository;
+        private readonly IPlatformRepo _repository;
         private readonly IMapper _mapper;
 
-        public GrpcPlatformService(PlatformRepo repository, IMapper mapper)
+        public GrpcPlatformService(IPlatformRepo repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
@@ -19,11 +19,11 @@ namespace PlatformService.SyncDataServices.Grpc
         public override Task<PlatformResponse> GetAllPlatforms(GetAllRequests request, ServerCallContext context)
         {
             var response = new PlatformResponse();
-            var _platforms = _repository.GetAllPlatforms();
+            var platforms = _repository.GetAllPlatforms();
 
-            foreach (var platform in _platforms)
+            foreach(var plat in platforms)
             {
-                response.Platform.Add(_mapper.Map<GrpcPlatformModel>(platform));
+                response.Platform.Add(_mapper.Map<GrpcPlatformModel>(plat));
             }
 
             return Task.FromResult(response);

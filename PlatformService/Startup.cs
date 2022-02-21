@@ -23,15 +23,15 @@ namespace PlatformService
 {
     public class Startup
     {
-        public IConfiguration _Configuration { get; }
+        public IConfiguration Configuration { get; }
         private readonly IWebHostEnvironment _env;
+
         public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
-            _Configuration = configuration;
+            Configuration = configuration;
             _env = env;
         }
 
-        public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -39,15 +39,17 @@ namespace PlatformService
             {
                 Console.WriteLine("--> Using SqlServer Db");
                 services.AddDbContext<AppDbContext>(opt =>
-                    opt.UseSqlServer(_Configuration.GetConnectionString("PlatformsConn")));
+                    opt.UseSqlServer(Configuration.GetConnectionString("PlatformsConn")));
             }
             else
             {
                 Console.WriteLine("--> Using InMem Db");
                 services.AddDbContext<AppDbContext>(opt =>
-                    opt.UseInMemoryDatabase("InMem"));
+                     opt.UseInMemoryDatabase("InMem"));
             }
+
             services.AddScoped<IPlatformRepo, PlatformRepo>();
+
             services.AddHttpClient<ICommandDataClient, HttpCommandDataClient>();
             services.AddSingleton<IMessageBusClient, MessageBusClient>();
             services.AddGrpc();
@@ -57,7 +59,11 @@ namespace PlatformService
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "PlatformService", Version = "v1" });
             });
+
+            Console.WriteLine($"--> CommandService Endpoint {Configuration["CommandService"]}");
+
         }
+
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -68,7 +74,7 @@ namespace PlatformService
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "PlatformService v1"));
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
 
@@ -85,7 +91,8 @@ namespace PlatformService
                 });
             });
 
-            PrepDb.PrepPopulation(app, _env.IsProduction());
+            PrepDb.PrepPopulation(app, env.IsProduction());
+
         }
     }
 }

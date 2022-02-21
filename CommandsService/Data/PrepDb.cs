@@ -20,15 +20,16 @@ namespace CommandsService.Data
                 SeedData(serviceScope.ServiceProvider.GetService<ICommandRepo>(), platforms);
             }
         }
-
+        
         private static void SeedData(ICommandRepo repo, IEnumerable<Platform> platforms)
         {
-            Console.WriteLine("Seeding new platforms");
-            foreach (var platform in platforms)
+            Console.WriteLine("Seeding new platforms...");
+
+            foreach (var plat in platforms)
             {
-                if (!repo.ExternalPlatformExists(platform.ExternalID))
+                if(!repo.ExternalPlatformExists(plat.ExternalID))
                 {
-                    repo.CreatePlatform(platform);
+                    repo.CreatePlatform(plat);
                 }
                 repo.SaveChanges();
             }
